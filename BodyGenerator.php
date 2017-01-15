@@ -53,101 +53,76 @@
 /**
  * Created by PhpStorm.
  * User: agott
- * Date: 1/9/17
- * Time: 20:59
+ * Date: 1/14/17
+ * Time: 21:02
  */
-class HeaderGenerator
+class BodyGenerator
 {
 
-    var $openingHead = "<head>";
-    var $closingHead = "</head>";
-    var $doctype = "<!doctype html>";
-    var $closingHtml = "</html>";
-
+    var $openingBody = "<body>";
+    var $closingBody = "</body>";
     var $page;
-    var $siteSettings;
 
-    /**
-     * HeaderGenerator constructor.
-     * @param Page $page
-     * @param SiteSettings $siteSettings
-     */
-    function __construct(Page $page, SiteSettings $siteSettings)
+    function __construct(Page $page)
     {
         $this->page = $page;
-        $this->siteSettings = $siteSettings;
     }
 
     /**
-     * @param string $closingHead
+     * @return string
      */
-    public function setClosingHead($closingHead)
+    public function getOpeningBody()
     {
-        $this->closingHead = $closingHead;
+        return $this->openingBody;
     }
 
     /**
-     * @param string $doctype
+     * @param string $openingBody
      */
-    public function setDoctype($doctype)
+    public function setOpeningBody($openingBody)
     {
-        $this->doctype = $doctype;
+        $this->openingBody = $openingBody;
     }
 
     /**
-     * @param string $openingHead
+     * @return string
      */
-    public function setOpeningHead($openingHead)
+    public function getClosingBody()
     {
-        $this->openingHead = $openingHead;
+        return $this->closingBody;
     }
 
     /**
-     * @return string A HTML title tag.
+     * @param string $closingBody
      */
-    public function generateTitleTag()
+    public function setClosingBody($closingBody)
     {
-        return "<title>" . $this->siteSettings->getName() . ": " . $this->page->getTitle() . "</title>";
+        $this->closingBody = $closingBody;
     }
 
     /**
-     * @return string A HTML meta description tag.
+     * @return string Generates the HTML H1 title tag for a page.
      */
-    public function generateMetaDescriptionTag()
+    public function generateH1()
     {
-        if (!is_null($this->page->getDescription())) {
-            return "<meta name=\"description\" content=\"" . $this->page->getDescription() . "\">";
-        } else {
-            return "<meta name=\"description\" content=\"" . substr($this->page->getContent(), 0, 90) . " [...]\">";
-        }
+        return "<h1>" . $this->page->getTitle() . "</h1>";
     }
 
     /**
-     * @return string A lang HTML tag.
+     * @return string Generates the abstract for a page.
      */
-    public function generateHTMLLangTag()
+    public function generateAbstract()
     {
-        return "<html lang=\"" . $this->siteSettings->getLang() . "\">";
+        return "<p class=\"abstract\">" . $this->page->getDescription() . "</p>";
     }
 
-    public function generateMetaCharset()
+    /**
+     * @return string Generates the content of a page.
+     */
+    public function generateContent()
     {
-        return "<meta charset=\"" . $this->siteSettings->getCharset() . "\">";
+        return "<p class=\"content\">" . $this->page->getContent() . "</p>";
     }
 
-    public function generateStylesheetsLinkHref()
-    {
-        $stylesheets = $this->siteSettings->stylesheets;
-        $cssStrs = "";
-        $i = 0;
-        foreach ($stylesheets as $stylesheet) {
-            $cssStrs = $cssStrs . "<link href=\"resources/css/" . $stylesheet . "\" rel=\"stylesheet\">";
-            if ($i == count($stylesheets) - 1) {
-                echo "\n";
-            }
-            $i++;
-        }
-        return $cssStrs;
-    }
 
 }
